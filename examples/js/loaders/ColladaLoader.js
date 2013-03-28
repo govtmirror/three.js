@@ -3490,6 +3490,10 @@ THREE.ColladaLoader = function () {
 					// gets figured out up top
 					break;
 
+				case 'transparent':
+					props[ 'transparent' ] = true;
+					break;
+
 				default:
 					break;
 
