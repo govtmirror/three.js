@@ -952,6 +952,30 @@ THREE.ColladaLoader = function () {
 						var shader = effects[ effect_id ].shader;
 						var material3js = shader.material;
 
+						// Get bind vertex input data from the instance material and assign it to applicable textures
+						if(instance_material.bindVertexInputs ) {
+							for(var i = 0; i < instance_material.bindVertexInputs.length; i++) {
+								var bindVertexInput = instance_material.bindVertexInputs[i];
+								if(bindVertexInput.input_set > 0) {
+									if(material3js.map && material3js.map.texcoord == bindVertexInput.semantic) {
+										material3js.map.input_set = bindVertexInput.input_set;
+									}
+									if(material3js.lightMap && material3js.lightMap.texcoord == bindVertexInput.semantic) {
+										material3js.lightMap.input_set = bindVertexInput.input_set;
+									}
+									if(material3js.bumpMap && material3js.bumpMap.texcoord == bindVertexInput.semantic) {
+										material3js.bumpMap.input_set = bindVertexInput.input_set;
+									}
+									if(material3js.normalMap && material3js.normalMap.texcoord == bindVertexInput.semantic) {
+										material3js.normalMap.input_set = bindVertexInput.input_set;
+									}
+									if(material3js.specularMap && material3js.specularMap.texcoord == bindVertexInput.semantic) {
+										material3js.specularMap.input_set = bindVertexInput.input_set;
+									}
+								}
+							}
+						}
+
 						if ( geometry.doubleSided ) {
 
 							if ( !( instance_material.symbol in double_sided_materials ) ) {
@@ -2459,6 +2483,7 @@ THREE.ColladaLoader = function () {
 
 		this.symbol = "";
 		this.target = "";
+		this.bindVertexInputs = [];
 
 	};
 
@@ -2466,9 +2491,31 @@ THREE.ColladaLoader = function () {
 
 		this.symbol = element.getAttribute('symbol');
 		this.target = element.getAttribute('target').replace(/^#/, '');
+		for(var i = 0; i < element.childNodes.length; i++) {
+			var child = element.childNodes[i];
+			if ( child.nodeType !== 1 ) continue;
+
+			if(child.nodeName == "bind_vertex_input") {
+				this.bindVertexInputs.push( (new BindVertexInput()).parse(child) );
+			}
+		}
 		return this;
 
 	};
+
+	function BindVertexInput() {
+		this.semantic = "";
+		this.input_semantic = "";
+		this.input_set = 0;
+	}
+
+	BindVertexInput.prototype.parse = function(element) {
+		this.semantic = element.getAttribute("semantic");
+		this.input_semantic = element.getAttribute("input_semantic");
+		this.input_set = _attr_as_int(element, 'input_set', 0);
+
+		return this;
+	}
 
 	function InstanceGeometry() {
 
@@ -2886,7 +2933,6 @@ THREE.ColladaLoader = function () {
 
 			}
 		}
-
 	};
 
 	function Polygons () {
@@ -3442,6 +3488,7 @@ THREE.ColladaLoader = function () {
 								if (image) {
 
 									var texture = THREE.ImageUtils.loadTexture(baseUrl + image.init_from);
+									texture.texcoord = cot.texcoord;
 									texture.wrapS = cot.texOpts.wrapU ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
 									texture.wrapT = cot.texOpts.wrapV ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
 									texture.offset.x = cot.texOpts.offsetU;
@@ -3453,6 +3500,9 @@ THREE.ColladaLoader = function () {
 									}
 									else if(prop == "bump") {
 										props["bumpMap"] = texture;
+									}
+									else if(prop == "emission") {
+										props["lightMap"] = texture;
 									}
 									else {
 										props['map'] = texture;
