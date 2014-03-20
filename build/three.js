@@ -21215,7 +21215,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 				geometryGroup.__uvArray = [];
 				for(var i = 0; i < geometry.faceVertexUvs.length; i++) {
 					geometryGroup.__uvArray.push(new Float32Array( nvertices * 2 ))
-			}
+				}
 
 			}
 
@@ -22318,28 +22318,30 @@ THREE.WebGLRenderer = function ( parameters ) {
 		if ( dirtyUvs && obj_uvs && uvType ) {
 
 			for(j = 0; j < obj_uvs.length; j++) {
+
 				offset_uv = 0;
 				uvArray = uvArrays[j];
-			for ( f = 0, fl = chunk_faces3.length; f < fl; f ++ ) {
 
-				fi = chunk_faces3[ f ];
+				for ( f = 0, fl = chunk_faces3.length; f < fl; f ++ ) {
 
-					uv = obj_uvs[j][ fi ];
+					fi = chunk_faces3[ f ];
 
-				if ( uv === undefined ) continue;
+						uv = obj_uvs[j][ fi ];
 
-				for ( i = 0; i < 3; i ++ ) {
+					if ( uv === undefined ) continue;
 
-					uvi = uv[ i ];
+					for ( i = 0; i < 3; i ++ ) {
 
-					uvArray[ offset_uv ]     = uvi.x;
-					uvArray[ offset_uv + 1 ] = uvi.y;
+						uvi = uv[ i ];
 
-					offset_uv += 2;
+						uvArray[ offset_uv ]     = uvi.x;
+						uvArray[ offset_uv + 1 ] = uvi.y;
+
+						offset_uv += 2;
+
+					}
 
 				}
-
-			}
 
 			}
 
@@ -22374,7 +22376,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 				_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVBumpMapBuffer );
 				_gl.bufferData( _gl.ARRAY_BUFFER, uvArrays[material.bumpMap.input_set], hint );
 
-				}
+			}
 
 			if ( material.normalMap ) {
 
@@ -23282,12 +23284,13 @@ THREE.WebGLRenderer = function ( parameters ) {
 					enableAttribute( attributes.uvMap );
 					_gl.vertexAttribPointer( attributes.uvMap, 2, _gl.FLOAT, false, 0, 0 );
 
-				} else if (object.geometry.faceVertexUvs[0]) {
+				} else if ( object.geometry.faceVertexUvs[0] ) {
+
 					_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVMapBuffer );
 					enableAttribute( attributes.uvMap );
 					_gl.vertexAttribPointer( attributes.uvMap, 2, _gl.FLOAT, false, 0, 0 );
-				}
-				else if ( material.defaultAttributeValues ) {
+
+				} else if ( material.defaultAttributeValues ) {
 
 					_gl.vertexAttrib2fv( attributes.uvMap, material.defaultAttributeValues.uvMap );
 
@@ -23296,31 +23299,29 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			if ( attributes.uvLightMap >= 0 ) {
 
-				if(material.lightMap && object.geometry.faceVertexUvs[material.lightMap.input_set]) {
+				if( material.lightMap && object.geometry.faceVertexUvs[material.lightMap.input_set] ) {
 
 					_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVLightMapBuffer );
 					enableAttribute( attributes.uvLightMap );
 					_gl.vertexAttribPointer( attributes.uvLightMap, 2, _gl.FLOAT, false, 0, 0 );
 
-				}
-				else if ( material.defaultAttributeValues ) {
+				} else if ( material.defaultAttributeValues ) {
 
 					_gl.vertexAttrib2fv( attributes.uvLightMap, material.defaultAttributeValues.uvLightMap );
 
-			}
+				}
 
 			}
 
 			if ( attributes.uvSpecularMap >= 0 ) {
 
-				if(material.specularMap && object.geometry.faceVertexUvs[material.specularMap.input_set]) {
+				if( material.specularMap && object.geometry.faceVertexUvs[material.specularMap.input_set] ) {
 
 					_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVSpecularMapBuffer );
 					enableAttribute( attributes.uvSpecularMap );
 					_gl.vertexAttribPointer( attributes.uvSpecularMap, 2, _gl.FLOAT, false, 0, 0 );
 
-				}
-				else if ( material.defaultAttributeValues ) {
+				} else if ( material.defaultAttributeValues ) {
 
 					_gl.vertexAttrib2fv( attributes.uvSpecularMap, material.defaultAttributeValues.uvSpecularMap );
 
@@ -23330,14 +23331,13 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			if ( attributes.uvBumpMap >= 0 ) {
 
-				if(material.bumpMap && object.geometry.faceVertexUvs[material.bumpMap.input_set]) {
+				if( material.bumpMap && object.geometry.faceVertexUvs[material.bumpMap.input_set] ) {
 
 					_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVBumpMapBuffer );
 					enableAttribute( attributes.uvBumpMap );
 					_gl.vertexAttribPointer( attributes.uvBumpMap, 2, _gl.FLOAT, false, 0, 0 );
 
-				}
-				else if ( material.defaultAttributeValues ) {
+				} else if ( material.defaultAttributeValues ) {
 
 					_gl.vertexAttrib2fv( attributes.uvBumpMap, material.defaultAttributeValues.uvBumpMap );
 
@@ -23347,14 +23347,13 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			if ( attributes.uvNormalMap >= 0 ) {
 
-				if(material.normalMap && object.geometry.faceVertexUvs[material.normalMap.input_set]) {
+				if( material.normalMap && object.geometry.faceVertexUvs[material.normalMap.input_set] ) {
 
 					_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVNormalMapBuffer );
 					enableAttribute( attributes.uvNormalMap );
 					_gl.vertexAttribPointer( attributes.uvNormalMap, 2, _gl.FLOAT, false, 0, 0 );
 
-				}
-				else if ( material.defaultAttributeValues ) {
+				} else if ( material.defaultAttributeValues ) {
 
 					_gl.vertexAttrib2fv( attributes.uvNormalMap, material.defaultAttributeValues.uvNormalMap );
 
@@ -23362,8 +23361,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			}
 
-			if ( material.skinning &&
-				 attributes.skinIndex >= 0 && attributes.skinWeight >= 0 ) {
+			if ( material.skinning && attributes.skinIndex >= 0 && attributes.skinWeight >= 0 ) {
 
 				_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglSkinIndicesBuffer );
 				enableAttribute( attributes.skinIndex );
@@ -24839,15 +24837,15 @@ THREE.WebGLRenderer = function ( parameters ) {
 		}
 
 		if(material.map) {
-		uniforms.map.value = material.map;
+			uniforms.map.value = material.map;
 			uniforms.mapInputSet.value = material.map.input_set;
 		}
 		if(material.lightMap) {
-		uniforms.lightMap.value = material.lightMap;
+			uniforms.lightMap.value = material.lightMap;
 			uniforms.lightMapInputSet.value = material.lightMap.input_set;
 		}
 		if(material.specularMap) {
-		uniforms.specularMap.value = material.specularMap;
+			uniforms.specularMap.value = material.specularMap;
 			uniforms.specularMapInputSet.value = material.specularMap.input_set;
 		}
 
