@@ -1330,7 +1330,7 @@ THREE.ColladaLoader = function () {
 					for ( var j = 0, jl = input.length; j < jl; j++ ) {
 
 						var time = input[j],
-							data = sampler.getData( transform.type, j ),
+							data = sampler.getData( transform.type, j, member ),
 							key = findKey( keys, time );
 
 						if ( !key ) {
@@ -4135,7 +4135,7 @@ THREE.ColladaLoader = function () {
 
 	};
 
-	Sampler.prototype.getData = function ( type, ndx ) {
+	Sampler.prototype.getData = function ( type, ndx, member ) {
 
 		var data;
 
@@ -4181,6 +4181,10 @@ THREE.ColladaLoader = function () {
 
 			data = this.output[ ndx ];
 
+			if ( member && type == 'translate' ) {
+				data = getConvertedTranslation( member, data );
+			}
+			
 		}
 
 		return data;
@@ -4823,6 +4827,31 @@ THREE.ColladaLoader = function () {
 
 		}
 
+	};
+
+	function getConvertedTranslation( axis, data ) {
+
+		if ( !options.convertUpAxis || colladaUp === options.upAxis ) {
+
+			return;
+
+		}
+
+		switch ( axis ) {
+			case 'X':
+				data = upConversion == 'XtoY' ? data * -1 : data;
+				break;
+			case 'Y':
+				data = upConversion == 'YtoZ' || upConversion == 'YtoX' ? data * -1 : data;
+				break;
+			case 'Z':
+				data = upConversion == 'ZtoY' ? data * -1 : data ;
+				break;
+			default:
+				break;
+		}
+
+		return data;
 	};
 
 	function getConvertedVec3( data, offset ) {
