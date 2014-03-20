@@ -22348,7 +22348,12 @@ THREE.WebGLRenderer = function ( parameters ) {
 				_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVMapBuffer );
 				_gl.bufferData( _gl.ARRAY_BUFFER, uvArrays[material.map.input_set], hint );
 
-		}
+			} else if (offset_uv > 0) {
+
+				_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVMapBuffer );
+				_gl.bufferData( _gl.ARRAY_BUFFER, uvArrays[0], hint );
+
+			}
 
 			if ( material.lightMap ) {
 
@@ -23277,7 +23282,11 @@ THREE.WebGLRenderer = function ( parameters ) {
 					enableAttribute( attributes.uvMap );
 					_gl.vertexAttribPointer( attributes.uvMap, 2, _gl.FLOAT, false, 0, 0 );
 
-				} 
+				} else if (object.geometry.faceVertexUvs[0]) {
+					_gl.bindBuffer( _gl.ARRAY_BUFFER, geometryGroup.__webglUVMapBuffer );
+					enableAttribute( attributes.uvMap );
+					_gl.vertexAttribPointer( attributes.uvMap, 2, _gl.FLOAT, false, 0, 0 );
+				}
 				else if ( material.defaultAttributeValues ) {
 
 					_gl.vertexAttrib2fv( attributes.uvMap, material.defaultAttributeValues.uvMap );
