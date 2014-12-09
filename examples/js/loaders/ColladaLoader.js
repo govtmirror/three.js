@@ -3625,6 +3625,7 @@ THREE.ColladaLoader = function () {
 				case 'emission':
 				case 'diffuse':
 				case 'specular':
+				case 'specularLevel':
 				case 'transparent':
 
 					this[ child.nodeName ] = ( new ColorOrTexture() ).parse( child );
@@ -3717,6 +3718,7 @@ THREE.ColladaLoader = function () {
 			'diffuse':'map',
 			'ambient':'lightMap' ,
 			'specular':'specularMap',
+			'specularLevel':'specularMap',
 			'emission':'emissionMap',
 			'bump':'bumpMap',
 			'normal':'normalMap'
@@ -3730,6 +3732,7 @@ THREE.ColladaLoader = function () {
 				case 'emission':
 				case 'diffuse':
 				case 'specular':
+				case 'specularLevel':
 				case 'bump':
 				case 'normal':
 
@@ -3791,6 +3794,10 @@ THREE.ColladaLoader = function () {
 							if ( prop === 'emission' ) {
 
 								props[ 'emissive' ] = cot.color.getHex();
+
+							} if ( prop === 'specularLevel' ) {
+
+								props[ 'specular' ] = cot.color.getHex();
 
 							} else {
 
