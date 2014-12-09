@@ -3805,7 +3805,7 @@ THREE.ColladaLoader = function () {
 
 								props[ 'emissive' ] = cot.color.getHex();
 
-							} if ( prop === 'specularLevel' ) {
+							} else if ( prop === 'specularLevel' ) {
 
 								props[ 'specular' ] = cot.color.getHex();
 
