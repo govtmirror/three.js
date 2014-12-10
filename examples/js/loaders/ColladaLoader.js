@@ -2666,17 +2666,12 @@ THREE.ColladaLoader = function () {
 
 		}
 
-		this.geometry3js.computeCentroids();
-		this.geometry3js.computeFaceNormals();
-
 		if ( this.geometry3js.calcNormals ) {
 
 			this.geometry3js.computeVertexNormals();
 			delete this.geometry3js.calcNormals;
 
 		}
-
-		// this.geometry3js.computeBoundingBox();
 
 		return this;
 
